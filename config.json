@@ -1,0 +1,15 @@
+{
+  "game": "Grand Theft Auto VI",
+  "languages": ["ES", "EN"],
+  "periods": ["LAST_DAY", "LAST_WEEK"],
+  "min_views": 300,
+  "min_clip_seconds": 8,
+  "max_clip_seconds": 60,
+  "pad_before": 15,
+  "pad_after": 25,
+  "final_min_seconds": 15,
+  "final_max_seconds": 60,
+  "skip_title_regex": "#ad|drops|sponsor|giveaway|subathon|hellofresh|!drops",
+  "blocked_broadcasters": [],
+  "dedupe_vod_window_seconds": 90
+}
