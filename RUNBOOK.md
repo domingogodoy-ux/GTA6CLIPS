@@ -22,8 +22,9 @@ Todo se ejecuta desde la raíz del repositorio. Los pasos 1–3 son mecánicos; 
 bash setup.sh                 # ffmpeg, librerías, TwitchDownloaderCLI, modelo de transcripción (~3-6 min la 1ª vez)
 python3 pipeline/state.py merge-yt   # evita repetir: agrega lo ya subido a YouTube ([src:slug]); si falla, sigue
 ```
-Si faltan `YT_CLIENT_ID`, `YT_CLIENT_SECRET`, `YT_REFRESH_TOKEN`, `IG_USER_ID` o `IG_ACCESS_TOKEN`, hacer el
-clip igual, **no publicar**, y avisar claramente en el resumen cuáles faltan.
+Si faltan `YT_CLIENT_ID`, `YT_CLIENT_SECRET` o `YT_REFRESH_TOKEN`, hacer el clip igual, **no publicar**, y avisar
+claramente en el resumen cuáles faltan. Si faltan solo `IG_USER_ID`/`IG_ACCESS_TOKEN` (Instagram aún no conectado),
+publicar en YouTube normalmente, omitir Instagram y mencionarlo en una línea del resumen.
 
 ## 1. Descubrir
 ```
