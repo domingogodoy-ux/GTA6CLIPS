@@ -101,13 +101,15 @@ Escribir `work/<slug>/caption.json`:
 ## 7. Publicar (solo si hay credenciales)
 ```
 python3 pipeline/publish_youtube.py upload work/<slug>/clip.mp4 work/<slug>/caption.json work/<slug>/cover_YT_1280x720.jpg
-python3 pipeline/publish_instagram.py publish work/<slug>/clip.mp4 work/<slug>/caption.json [cover_url]
+python3 pipeline/ig_cover_frame.py work/<slug>/clip.mp4 work/<slug>/cover_REELS_1080x1920.jpg work/<slug>/clip_ig.mp4
+python3 pipeline/publish_instagram.py publish work/<slug>/clip_ig.mp4 work/<slug>/caption.json
 ```
 - YouTube primero. Verificar en la salida que `privacy` sea `public`; si salió `private`, avisarlo en el resumen.
-- Instagram: la portada del Reel solo se acepta como URL pública. Opcional: copiar la portada de Reels a
-  `covers/<slug>.jpg`, hacer commit + push, esperar a que
-  `https://domingogodoy-ux.github.io/GTA6CLIPS/covers/<slug>.jpg` responda 200 y pasarla como `cover_url`.
-  Si no se puede, publicar sin ella y enviar la portada en el chat.
+- Instagram: la portada del Reel **siempre** debe estar (regla del usuario). Se logra con `ig_cover_frame.py`:
+  antepone la portada de Reels (1080x1920) como primer fotograma (1/60 s, sin recodificar el clip) y
+  `publish_instagram.py` publica ese `clip_ig.mp4` con `thumb_offset=0`, así la miniatura es la portada.
+  Sin GitHub Pages ni URL pública. Usar el nombre real del archivo de portada de Reels de `work/<slug>/`.
+  Si `ig_cover_frame.py` falla, publicar el clip normal y reportarlo en el resumen. YouTube usa su portada 1280x720.
 - **No reintentar una publicación que pudo haberse completado** (riesgo de duplicado). Ante un error de red
   después de subir, comprobar primero con `publish_youtube.py recent` o en la respuesta si el video ya existe.
 - Si una plataforma falla, igual publicar en la otra y reportar el fallo.

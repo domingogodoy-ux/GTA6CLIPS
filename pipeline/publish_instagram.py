@@ -7,7 +7,8 @@ Uso:
   python pipeline/publish_instagram.py check       # verifica que el token y la cuenta funcionan (no publica)
 
 caption.json: {"ig_caption": "..."}
-cover_url (opcional): URL pública de la portada del Reel (la API no acepta archivo local para la portada).
+Portada: usar antes `ig_cover_frame.py` (pone la portada como primer fotograma y se publica con thumb_offset=0).
+cover_url (opcional, alternativa): URL pública de la portada del Reel (la API no acepta archivo local para la portada).
 """
 import json
 import os
@@ -35,6 +36,9 @@ def publish(video, caption, cover_url=None):
             "share_to_feed": "true", "access_token": tok}
     if cover_url:
         form["cover_url"] = cover_url
+    else:
+        # La portada va como primer fotograma del video (ver ig_cover_frame.py): miniatura = fotograma 0.
+        form["thumb_offset"] = "0"
     c = _req(f"{GRAPH}/{uid}/media", urllib.parse.urlencode(form).encode(),
              {"Content-Type": "application/x-www-form-urlencoded"}, "POST")
     cid = c["id"]
