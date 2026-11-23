@@ -19,6 +19,18 @@ import urllib.parse
 import urllib.request
 
 GRAPH = "https://graph.facebook.com/v25.0"
+# Huella (no es el token) para detectar un token mal copiado desde el prompt de la tarea programada.
+TOKEN_LEN, TOKEN_SHA10 = 199, "dee09688b9"
+
+
+def _token():
+    import hashlib
+    tok = os.environ["IG_ACCESS_TOKEN"].strip()
+    if len(tok) != TOKEN_LEN or hashlib.sha256(tok.encode()).hexdigest()[:10] != TOKEN_SHA10:
+        sys.exit(f"IG_ACCESS_TOKEN mal copiado (largo {len(tok)}, esperado {TOKEN_LEN}). "
+                 "Volver a exportarlo copiando el valor EXACTO de la tarea, carácter por carácter, sin acortar "
+                 "ni cambiar letras (cuidado con I/l/1 y O/0), y reintentar antes de dar la publicación por fallida.")
+    return tok
 
 
 def _req(url, data=None, headers=None, method=None):
@@ -31,7 +43,7 @@ def _req(url, data=None, headers=None, method=None):
 
 
 def publish(video, caption, cover_url=None):
-    uid, tok = os.environ["IG_USER_ID"], os.environ["IG_ACCESS_TOKEN"]
+    uid, tok = os.environ["IG_USER_ID"], _token()
     form = {"media_type": "REELS", "upload_type": "resumable", "caption": caption[:2200],
             "share_to_feed": "true", "access_token": tok}
     if cover_url:
@@ -67,7 +79,7 @@ def publish(video, caption, cover_url=None):
 
 
 def check():
-    tok, uid = os.environ["IG_ACCESS_TOKEN"], os.environ["IG_USER_ID"]
+    tok, uid = _token(), os.environ["IG_USER_ID"]
     r = _req(f"{GRAPH}/{uid}?fields=username&access_token={tok}")
     return {"ok": True, "username": r.get("username")}
 

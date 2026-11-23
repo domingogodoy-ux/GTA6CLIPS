@@ -103,6 +103,9 @@ Escribir `work/<slug>/caption.json`:
 ```
 
 ## 7. Publicar (solo si hay credenciales)
+Antes de editar nada, correr `python3 pipeline/publish_instagram.py check` con las credenciales exportadas. Si dice
+`mal copiado`, re-exportar el token copiando el valor exacto de la tarea y repetir hasta que responda `ok`; así no
+se pierde un Reel por un error de transcripción (ya pasó una vez con el error 190 de Meta).
 ```
 python3 pipeline/publish_youtube.py upload work/<slug>/clip.mp4 work/<slug>/caption.json work/<slug>/cover_YT_1280x720.jpg
 python3 pipeline/ig_cover_frame.py work/<slug>/clip.mp4 work/<slug>/cover_REELS_1080x1920.jpg work/<slug>/clip_ig.mp4
