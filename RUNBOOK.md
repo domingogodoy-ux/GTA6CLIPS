@@ -12,6 +12,12 @@ Todo se ejecuta desde la raíz del repositorio. Los pasos 1–3 son mecánicos; 
   antes de elegir mira `state/published.json`: si en las últimas 24 h hubo menos de 2 clips en español por
   cada 3 publicados, elige un candidato `ES` aunque sea algo menos viral. Solo se publica uno en inglés si es
   claramente mucho mejor o si no hay ningún candidato en español de calidad aceptable (dilo en el resumen).
+- **Creadores obligatorios (si o si): Rubius, Ibai y Auronplay.** Si `discover.py` muestra un candidato con
+  marca `MUST` (viene de `must_broadcasters` en `config.json`) que cumpla los criterios del paso 1, **se elige ese**
+  antes que cualquier otro, aunque tenga pocas vistas, salvo que ya se haya publicado un clip del mismo streamer
+  en las últimas 8 h. Si no hay ninguno, se sigue con los `PRIO` (creadores en español destacados: TheGrefg,
+  elxokas, Knekro, IlloJuan, DjMaRiiO, ElSpreen, Coscu, Spursito, Mixwell, Vegetta777, etc.) y luego el resto.
+  Para agregar más creadores basta editar `priority_broadcasters` o `must_broadcasters` en `config.json`.
 - Publicar **público e inmediato**, sin revisión. 3 clips al día.
 - Contenido sensible (desnudez, sexo, drogas, violencia gráfica): **no se descarta, se difumina** solo la zona
   problemática (`blur` en el spec) y se publica igual. Excepción: si la escena es explícita de principio a fin y

@@ -50,8 +50,18 @@ def main():
             seen.add(node["slug"])
             b = (node.get("broadcaster") or {}).get("login", "")
             pref = node.get("language") == c.get("preferred_language")
-            if node["viewCount"] < (c.get("preferred_language_min_views", c["min_views"]) if pref else c["min_views"]):
+            must = b.lower() in [x.lower() for x in c.get("must_broadcasters", [])]
+            prio = b.lower() in [x.lower() for x in c.get("priority_broadcasters", [])]
+            minv = c["min_views"]
+            if pref:
+                minv = c.get("preferred_language_min_views", minv)
+            if prio:
+                minv = min(minv, c.get("priority_min_views", minv))
+            if must:
+                minv = min(minv, c.get("must_min_views", minv))
+            if node["viewCount"] < minv:
                 continue
+            node["tier"] = "MUST" if must else ("PRIO" if prio else "")
             if not (c["min_clip_seconds"] <= node["durationSeconds"] <= c["max_clip_seconds"]):
                 continue
             if skip.search(node["title"] or "") or b in c["blocked_broadcasters"]:
@@ -61,7 +71,12 @@ def main():
             if already(node, state, c["dedupe_vod_window_seconds"]):
                 continue
             age_h = max(1.0, (now - dt.datetime.fromisoformat(node["createdAt"].replace("Z", "+00:00"))).total_seconds() / 3600)
-            node["score"] = round(node["viewCount"] / (age_h + 6) ** 0.5 * (c.get("preferred_language_boost", 1.0) if pref else 1.0), 1)
+            boost = c.get("preferred_language_boost", 1.0) if pref else 1.0
+            if prio:
+                boost = max(boost, c.get("priority_boost", 1.0))
+            if must:
+                boost = max(boost, c.get("must_boost", 1.0))
+            node["score"] = round(node["viewCount"] / (age_h + 6) ** 0.5 * boost, 1)
             out.append(node)
     out.sort(key=lambda n: n["score"], reverse=True)
     out = out[: a.top]
@@ -70,7 +85,7 @@ def main():
         return
     for n in out:
         v = n.get("video") or {}
-        print(f'{n["score"]:8} {n["viewCount"]:6}v {n["durationSeconds"]:>3}s {n["language"]} '
+        print(f'{n["score"]:8} {n["viewCount"]:6}v {n["durationSeconds"]:>3}s {n["language"]} {n.get("tier",""):4} '
               f'{(n["broadcaster"] or {}).get("login",""):16} {n["title"][:55]!r} '
               f'slug={n["slug"]} vod={v.get("id")} off={n.get("videoOffsetSeconds")}'
               f'{" [SIN VOD]" if n.get("_no_vod") else ""}')

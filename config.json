@@ -20,5 +20,37 @@
   "dedupe_vod_window_seconds": 90,
   "preferred_language": "ES",
   "preferred_language_boost": 2.5,
-  "preferred_language_min_views": 150
+  "preferred_language_min_views": 150,
+  "must_broadcasters": [
+    "rubius",
+    "ibai",
+    "auronplay"
+  ],
+  "must_boost": 10.0,
+  "must_min_views": 20,
+  "priority_broadcasters": [
+    "thegrefg",
+    "elxokas",
+    "knekro",
+    "illojuan",
+    "djmariio",
+    "elspreen",
+    "coscu",
+    "spursito",
+    "mixwell",
+    "vegetta777",
+    "carola",
+    "vicesat",
+    "alewang",
+    "superblazing_",
+    "padexxx_",
+    "sinapsisyt",
+    "rickystrikisoficial",
+    "nissaxter",
+    "vicens",
+    "tazercraft",
+    "willyrex"
+  ],
+  "priority_boost": 4.0,
+  "priority_min_views": 50
 }
