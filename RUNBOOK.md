@@ -70,7 +70,9 @@ Escribir `work/<slug>/spec.json` (formato en la cabecera de `pipeline/edit.py`):
   `hl: true` (amarillo) para la palabra/frase clave. Traducir al español si el streamer habla en inglés.
   Corregir lo que el ASR escuche mal (nombres, modismos, groserías); suavizar groserías fuertes con asteriscos.
   No poner títulos explicativos sobre lo que ya se ve.
-- `blur`: cajas en coordenadas de `src.mp4` con ventana de tiempo, para lo sensible (paso 3).
+- `blur`: cajas en coordenadas de `src.mp4` con ventana de tiempo, para lo sensible (paso 3). **Siempre pequeño**:
+  la caja ceñida solo a lo sensible (idealmente < 10 % del área del juego, nunca más de 15 %) y solo durante los
+  segundos necesarios. Si `edit.py` imprime `AVISO: blur ...`, achicar la caja y volver a renderizar.
 ```
 python3 pipeline/edit.py render work/<slug>/spec.json
 ```

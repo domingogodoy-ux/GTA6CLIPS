@@ -55,8 +55,19 @@ def _blur_chain(blur, src_label, n):
     return parts, cur
 
 
+def _warn_big_blur(spec):
+    """Avisa si una caja de blur es grande: el blur debe ser pequeño y ceñido a lo sensible."""
+    gc = spec.get("game_crop") or [0, 0, 1920, 1080]
+    area = gc[2] * gc[3]
+    for b in spec.get("blur") or []:
+        bw, bh = b["box"][2], b["box"][3]
+        if bw * bh > 0.10 * area:
+            print(f"AVISO: blur {bw}x{bh} cubre {bw*bh/area:.0%} del juego (max. recomendado 10%). Achicar la caja.")
+
+
 def cmd_render(spec_path):
     spec = json.load(open(spec_path, encoding="utf-8"))
+    _warn_big_blur(spec)
     slug = spec["slug"]
     d = workdir(slug)
     meta = json.load(open(os.path.join(d, "meta.json"), encoding="utf-8"))
