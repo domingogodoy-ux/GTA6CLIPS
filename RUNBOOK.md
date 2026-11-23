@@ -22,7 +22,7 @@ Todo se ejecuta desde la raíz del repositorio. Los pasos 1–3 son mecánicos; 
 - Contenido sensible (desnudez, sexo, drogas, violencia gráfica): **no se descarta, se difumina** solo la zona
   problemática (`blur` en el spec) y se publica igual. Excepción: si la escena es explícita de principio a fin y
   el blur taparía casi todo el encuadre, se salta ese candidato y se toma el siguiente.
-- Las portadas con cara usan Seedream 5.5 (Higgsfield) para mejorar la cara **sin pedir confirmación de costo**
+- Las portadas con cara usan Nano Banana 2.1 (Higgsfield, ~1,5 créditos por imagen) para mejorar la cara **sin pedir confirmación de costo**
   (excepción acordada solo para portadas). Cualquier otra generación con costo: no hacerla.
   Si Higgsfield rechaza la cara (`ip_detected`), usar la cara sin mejorar; nunca intentar saltarse el rechazo.
 - No ingresar ni mostrar contraseñas/tokens. Los secretos son variables de entorno; nunca imprimirlos.
@@ -81,8 +81,10 @@ volver a renderizar (máximo 2 reintentos).
 ## 5. Portadas
 1. Fotograma de buena calidad (sin chat ni overlays en el recorte) con `edit.py frame`.
 2. Recortar la cara del streamer (cuadrado) y mejorarla: `media_upload` → PUT con curl → `media_confirm` →
-   `generate_image` con `seedream_5_5`, relación 1:1, resolución 2k, la cara como `image_references`,
-   prompt: solo mejorar la calidad (nitidez, detalle), sin cambiar rasgos/expresión → `jobs_wait` → descargar.
+   `generate_image` con `nano_banana_2_1`, relación 1:1, `resolution` 1k, `thinking_level` minimal, `use_unlim` false,
+   `count` 1, la cara como `image_references`. Prompt probado: "Enhance this photo: increase sharpness, skin detail
+   and overall image quality. Keep the exact same person, face features, expression, headset and framing. Do not
+   change identity or expression." → `jobs_wait` → descargar. Una sola generación por portada (sin reintentos de pago).
 3. Escribir `work/<slug>/cover.json` (formato en `pipeline/cover.py`) y correr
    `python3 pipeline/cover.py work/<slug>/cover.json`. Texto gigante blanco + amarillo, círculo/flecha roja
    sobre lo que importa, barra superior "STREAMER JUEGA GTA VI". En Reels, todo entre y=240 e y=1680.
