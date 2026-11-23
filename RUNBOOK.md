@@ -120,4 +120,4 @@ git add state/published.json && git commit -m "Publica <slug>" && git push     #
 Enviar a la conversación con `SendUserFile`: el video final y las dos portadas (YouTube y Reels). Cerrar con un
 resumen de 4–6 líneas con `SendUserMessage`: clip elegido y por qué, streamer, links publicados, si se difuminó algo,
 y cualquier problema (credenciales ausentes, privacidad en privado, portada sin mejorar, token por vencer).
-Si hay un token de Instagram con más de 45 días, avisar para renovarlo (`publish_instagram.py refresh`).
+El token de Instagram es de usuario del sistema y no caduca. Si Instagram responde error de token/permisos, avisar claramente en el resumen.

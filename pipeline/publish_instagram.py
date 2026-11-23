@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Publica un Reel en Instagram con la API oficial (Instagram API with Instagram Login), subida resumable.
+"""Publica un Reel en Instagram con la API oficial (Instagram API with Unified Login, graph.facebook.com), subida resumable.
 
-Variables de entorno: IG_USER_ID, IG_ACCESS_TOKEN  (token de larga duración; caduca a los 60 días)
+Variables de entorno: IG_USER_ID, IG_ACCESS_TOKEN  (token de usuario del sistema; no caduca)
 Uso:
   python pipeline/publish_instagram.py publish <video.mp4> <caption.json> [cover_url]
-  python pipeline/publish_instagram.py refresh      # imprime un token renovado (hay que reemplazar el secreto a mano)
+  python pipeline/publish_instagram.py check       # verifica que el token y la cuenta funcionan (no publica)
 
 caption.json: {"ig_caption": "..."}
 cover_url (opcional): URL pública de la portada del Reel (la API no acepta archivo local para la portada).
@@ -17,7 +17,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-GRAPH = "https://graph.instagram.com/v25.0"
+GRAPH = "https://graph.facebook.com/v25.0"
 
 
 def _req(url, data=None, headers=None, method=None):
@@ -62,17 +62,17 @@ def publish(video, caption, cover_url=None):
     return {"id": mid, "url": info.get("permalink")}
 
 
-def refresh():
-    tok = os.environ["IG_ACCESS_TOKEN"]
-    r = _req(f"https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token={tok}")
-    return {"expires_in_days": round(r.get("expires_in", 0) / 86400), "access_token": r.get("access_token")}
+def check():
+    tok, uid = os.environ["IG_ACCESS_TOKEN"], os.environ["IG_USER_ID"]
+    r = _req(f"{GRAPH}/{uid}?fields=username&access_token={tok}")
+    return {"ok": True, "username": r.get("username")}
 
 
 if __name__ == "__main__":
     if len(sys.argv) >= 4 and sys.argv[1] == "publish":
         cap = json.load(open(sys.argv[3], encoding="utf-8"))
         print(json.dumps(publish(sys.argv[2], cap["ig_caption"], sys.argv[4] if len(sys.argv) > 4 else None)))
-    elif len(sys.argv) == 2 and sys.argv[1] == "refresh":
-        print(json.dumps(refresh()))
+    elif len(sys.argv) == 2 and sys.argv[1] == "check":
+        print(json.dumps(check()))
     else:
         sys.exit(__doc__)
