@@ -7,6 +7,11 @@ Todo se ejecuta desde la raíz del repositorio. Los pasos 1–3 son mecánicos; 
 ## Reglas permanentes del dueño (Domingo)
 - Idioma de textos: español de Chile, tono casual. Nunca bajar la resolución del original (el render usa
   fuente 1080p/1440p y salida 1080x1920@60 con CRF 17). No abusar de zooms.
+- **Prioridad a creadores en español**: la mayoría de los clips del día (al menos 2 de cada 3) deben ser de
+  streamers que hablan español. `discover.py` ya les da más puntaje (x2.5) y acepta menos vistas (150); aun así,
+  antes de elegir mira `state/published.json`: si en las últimas 24 h hubo menos de 2 clips en español por
+  cada 3 publicados, elige un candidato `ES` aunque sea algo menos viral. Solo se publica uno en inglés si es
+  claramente mucho mejor o si no hay ningún candidato en español de calidad aceptable (dilo en el resumen).
 - Publicar **público e inmediato**, sin revisión. 3 clips al día.
 - Contenido sensible (desnudez, sexo, drogas, violencia gráfica): **no se descarta, se difumina** solo la zona
   problemática (`blur` en el spec) y se publica igual. Excepción: si la escena es explícita de principio a fin y
@@ -31,9 +36,9 @@ publicar en YouTube normalmente, omitir Instagram y mencionarlo en una línea de
 python3 pipeline/discover.py --top 15
 ```
 Elegir **un** candidato: el más viral que cumpla (a) momento autocontenido que se pueda cortar en 15–60 s con
-inicio y desenlace claros, (b) no repetido, (c) no es un anuncio/drop, (d) alterna idiomas y streamers entre
+inicio y desenlace claros, (b) no repetido, (c) no es un anuncio/drop, (d) alterna streamers entre
 corridas (mirar `state/published.json`: evitar el mismo streamer dos veces seguidas). Los clips de
-habla hispana son prioridad cuando haya uno de calidad parecida.
+habla hispana (`ES`) son prioridad, según la regla permanente de arriba.
 
 ## 2. Descargar y transcribir
 ```

@@ -49,7 +49,8 @@ def main():
                 continue
             seen.add(node["slug"])
             b = (node.get("broadcaster") or {}).get("login", "")
-            if node["viewCount"] < c["min_views"]:
+            pref = node.get("language") == c.get("preferred_language")
+            if node["viewCount"] < (c.get("preferred_language_min_views", c["min_views"]) if pref else c["min_views"]):
                 continue
             if not (c["min_clip_seconds"] <= node["durationSeconds"] <= c["max_clip_seconds"]):
                 continue
@@ -60,7 +61,7 @@ def main():
             if already(node, state, c["dedupe_vod_window_seconds"]):
                 continue
             age_h = max(1.0, (now - dt.datetime.fromisoformat(node["createdAt"].replace("Z", "+00:00"))).total_seconds() / 3600)
-            node["score"] = round(node["viewCount"] / (age_h + 6) ** 0.5, 1)
+            node["score"] = round(node["viewCount"] / (age_h + 6) ** 0.5 * (c.get("preferred_language_boost", 1.0) if pref else 1.0), 1)
             out.append(node)
     out.sort(key=lambda n: n["score"], reverse=True)
     out = out[: a.top]
