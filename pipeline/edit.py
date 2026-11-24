@@ -15,6 +15,9 @@ spec.json:
   "subs": [{"a": 4.3, "b": 6.9, "text": "¡TEXTO!", "hl": false}],  # tiempos relativos al clip final
   "blur": [{"a": 3.0, "b": 5.5, "box": [x, y, w, h]}],             # zonas a difuminar; tiempos del clip final,
                                                                    # box en coordenadas de src.mp4
+  "headline": {"text": "AURONPLAY es tan bueno con la gente mayor 🤍", "tag": "VIRAL"} | null,
+                                            # titular de Reels/Shorts: banner blanco arriba con texto negro grande
+                                            # y etiqueta azul. Es el "hook de storytelling" (ver RUNBOOK paso 4b)
   "out": "clip.mp4"
 }
 """
@@ -30,6 +33,56 @@ W, H, FPS = 1080, 1920, 60
 GAME_H = 1166          # alto del recuadro del juego (1080x1166)
 CAM_W = 770
 YELLOW = "0xFFE600"
+
+
+BANNER_H = 400
+HEART = {"🤍", "❤", "❤️", "♥", "♡", "💙", "💛"}
+DEJAVU_B = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+
+
+def _banner_png(hl, out):
+    """Banner blanco 1080xBANNER_H: etiqueta azul + titular negro grande (Anton). Corazones -> ♥ rojo."""
+    from PIL import Image, ImageDraw, ImageFont
+    img = Image.new("RGB", (W, BANNER_H), "white")
+    dr = ImageDraw.Draw(img)
+    tag = (hl.get("tag") or "").strip()
+    y = 26
+    if tag:
+        tf = ImageFont.truetype(FONT, 44)
+        tw = int(dr.textlength(tag, font=tf))
+        dr.rounded_rectangle([54, y, 54 + tw + 44, y + 70], radius=12, fill="#1877F2")
+        dr.text((54 + 22, y + 35), tag, font=tf, fill="white", anchor="lm")
+        y += 96
+    text = hl["text"]
+    heart = any(h in text for h in HEART)
+    for h in HEART:
+        text = text.replace(h, "")
+    text = text.strip()
+    avail = BANNER_H - y - 18
+    size = 96
+    while size > 48:
+        font = ImageFont.truetype(FONT, size)
+        lines, cur = [], ""
+        for w in text.split():
+            t = (cur + " " + w).strip()
+            if dr.textlength(t, font=font) <= W - 120:
+                cur = t
+            else:
+                lines.append(cur)
+                cur = w
+        lines.append(cur)
+        if len(lines) * int(size * 1.18) <= avail and len(lines) <= 3:
+            break
+        size -= 4
+    lh = int(size * 1.18)
+    for i, ln in enumerate(lines):
+        dr.text((60, y + i * lh), ln, font=font, fill="#0A0A0A")
+        if heart and i == len(lines) - 1:
+            hx = 60 + int(dr.textlength(ln, font=font)) + 18
+            dr.text((hx, y + i * lh + int(size * 0.55)), "♥", font=ImageFont.truetype(DEJAVU_B, int(size * 0.8)),
+                    fill="#E0245E", anchor="lm")
+    img.save(out)
+    return out
 
 
 def cmd_frame(video, t, out):
@@ -86,9 +139,17 @@ def cmd_render(spec_path):
     exp_h = round(gc[2] * GAME_H / W)
     if abs(exp_h - gc[3]) > 0.03 * exp_h:  # corrijo la proporción para no deformar
         gc[3] = min(exp_h, sh - gc[1])
-    game_y = 120 if cam else (H - GAME_H) // 2
-    sub_y = 1050 if cam else 1450
-    cam_y = int(spec.get("cam_y", 1340))
+    hl = spec.get("headline")
+    if hl:  # banner blanco arriba; el juego va justo debajo a resolución completa; la cámara en lo que sobra
+        game_y = BANNER_H
+        sub_y = BANNER_H + 700
+        rest = H - (BANNER_H + GAME_H)
+        cam_h = min(int(spec.get("cam_h", 340)), rest - 20)
+        cam_y = BANNER_H + GAME_H + (rest - cam_h) // 2
+    else:
+        game_y = 120 if cam else (H - GAME_H) // 2
+        sub_y = 1050 if cam else 1450
+        cam_y = int(spec.get("cam_y", 1340))
 
     inputs = []
     for a, b in segs:
@@ -115,9 +176,15 @@ def cmd_render(spec_path):
     last = "o1"
     if cam:
         cx, cy, cw, ch = [int(v) for v in cam]
-        parts.append(f"[csrc]crop={cw}:{ch}:{cx}:{cy},scale={CAM_W}:-2[cam]")
+        scl = f"-2:{cam_h}" if hl else f"{CAM_W}:-2"
+        parts.append(f"[csrc]crop={cw}:{ch}:{cx}:{cy},scale={scl}[cam]")
         parts.append(f"[o1][cam]overlay=(W-w)/2:{cam_y}[o2]")
         last = "o2"
+    if hl:
+        bn = _banner_png(hl, os.path.join(d, "banner.png"))
+        inputs += ["-i", bn]
+        parts.append(f"[{last}][{n}:v]overlay=0:0[o3]")
+        last = "o3"
     # subtítulos
     dts = []
     for i, s in enumerate(spec.get("subs", [])):

@@ -88,6 +88,13 @@ Escribir `work/<slug>/spec.json` (formato en la cabecera de `pipeline/edit.py`):
 - `blur`: cajas en coordenadas de `src.mp4` con ventana de tiempo, para lo sensible (paso 3). **Siempre pequeño**:
   la caja ceñida solo a lo sensible (idealmente < 10 % del área del juego, nunca más de 15 %) y solo durante los
   segundos necesarios. Si `edit.py` imprime `AVISO: blur ...`, achicar la caja y volver a renderizar.
+- `headline` (**obligatorio en todos los Reels/Shorts**): `{"text": "...", "tag": "VIRAL"}` → banner blanco arriba con el titular
+  en negro, grande y en negrita, más etiqueta azul. Es el **hook de storytelling**: debe prometer algo entretenido que
+  se paga al final del clip, sin spoilear el remate. Fórmulas: contraste irónico ("AURONPLAY es tan bueno con la gente
+  mayor 🤍" y luego la empuja), curiosidad ("Lo que pasó cuando Rubius abrió esa puerta…"), apuesta ("No te vas a creer
+  cómo termina esto"). Máx. ~8 palabras, ≤ 3 líneas, español, sin groserías, un ♥/🤍 al final es opcional. Debe ser
+  verdad: lo que promete tiene que ocurrir en el clip. El primer subtítulo del clip refuerza el gancho (1–3 s) y el remate
+  llega en el último tercio. El juego se mantiene a resolución completa (1080x1166) bajo el banner.
 ```
 python3 pipeline/edit.py render work/<slug>/spec.json
 ```
