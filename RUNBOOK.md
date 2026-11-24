@@ -1,16 +1,16 @@
 # RUNBOOK — una corrida de clipping GTA VI (1 clip publicado por corrida)
 
-Este documento lo sigue Claude en cada tarea programada (8:00, 16:00 y 20:00, hora de Chile).
+Este documento lo sigue Claude en cada tarea programada (8:00, 12:00, 16:00, 20:00 y 22:00, hora de Chile).
 Nadie supervisa la corrida: Claude decide con criterio, no hace preguntas y deja un resumen al final.
 Todo se ejecuta desde la raíz del repositorio. Los pasos 1–3 son mecánicos; el criterio está en los pasos 4–8.
 
 ## Reglas permanentes del dueño (Domingo)
 - Idioma de textos: español de Chile, tono casual. Nunca bajar la resolución del original (el render usa
   fuente 1080p/1440p y salida 1080x1920@60 con CRF 17). No abusar de zooms.
-- **Prioridad a creadores en español**: la mayoría de los clips del día (al menos 2 de cada 3) deben ser de
+- **Prioridad a creadores en español**: la mayoría de los clips del día (al menos 3 de cada 5) deben ser de
   streamers que hablan español. `discover.py` ya les da más puntaje (x2.5) y acepta menos vistas (150); aun así,
-  antes de elegir mira `state/published.json`: si en las últimas 24 h hubo menos de 2 clips en español por
-  cada 3 publicados, elige un candidato `ES` aunque sea algo menos viral. Solo se publica uno en inglés si es
+  antes de elegir mira `state/published.json`: si en las últimas 24 h hubo menos de 3 clips en español por
+  cada 5 publicados, elige un candidato `ES` aunque sea algo menos viral. Solo se publica uno en inglés si es
   claramente mucho mejor o si no hay ningún candidato en español de calidad aceptable (dilo en el resumen).
 - **Creadores obligatorios (si o si): Rubius, Ibai y Auronplay.** Si `discover.py` muestra un candidato con
   marca `MUST` (viene de `must_broadcasters` en `config.json`) que cumpla los criterios del paso 1 **y tenga
@@ -19,7 +19,7 @@ Todo se ejecuta desde la raíz del repositorio. Los pasos 1–3 son mecánicos; 
   MUST no se publica por ser MUST. Si no hay ninguno, se sigue con los `PRIO` (creadores en español destacados: TheGrefg,
   elxokas, Knekro, IlloJuan, DjMaRiiO, ElSpreen, Coscu, Spursito, Mixwell, Vegetta777, etc.) y luego el resto.
   Para agregar más creadores basta editar `priority_broadcasters` o `must_broadcasters` en `config.json`.
-- Publicar **público e inmediato**, sin revisión. 3 clips al día.
+- Publicar **público e inmediato**, sin revisión. 5 clips al día (uno por corrida).
 - Contenido sensible (desnudez, sexo, drogas, violencia gráfica): **no se descarta, se difumina** solo la zona
   problemática (`blur` en el spec) y se publica igual. Excepción: si la escena es explícita de principio a fin y
   el blur taparía casi todo el encuadre, se salta ese candidato y se toma el siguiente.
