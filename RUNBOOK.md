@@ -46,10 +46,13 @@ Lo que funciona en redes es un **momento**: un remate, una reacción exagerada, 
 absurdo que haga reír en los primeros segundos. Un streamer hablando tranquilo, explicando o narrando NO es un clip.
 `preview.py` imprime una ficha por clip (audio + transcripción) y un ranking final con la `chispa` (0-100) más el
 bonus por idioma/creador. Elegir **un** clip así:
+0. Leer `CRITERIO_HUMOR.md` (ejemplos reales de lo que Domingo considera gracioso y lo que no). La `chispa` solo
+   preselecciona por audio y texto: **no distingue humor de volumen** (un clip tierno con gritos puede salir alto).
+   La decisión es tuya: para los 5 primeros escribir "gracioso porque… (segundo X)" y descartar los que no puedan.
 1. Leer las transcripciones del ranking de arriba hacia abajo y quedarse con el primero que de verdad tenga gancho
    (risas, gritos, "no puede ser", un remate claro) y cumpla: (a) momento autocontenido que se corte en 15-60 s,
    (b) no repetido, (c) no es anuncio/drop, (d) no repite streamer dos corridas seguidas (`state/published.json`).
-2. Exigir `chispa` >= 40. Si ninguno llega, correr `python3 pipeline/preview.py --top 25` para ampliar. Si aun así
+2. Exigir `chispa` >= 40 **y** que pase el filtro de `CRITERIO_HUMOR.md`. Si ninguno llega, correr `python3 pipeline/preview.py --top 25` para ampliar. Si aun así
    ninguno llega, publicar el mejor disponible y decir en el resumen que fue un día flojo.
 3. Los creadores obligatorios (MUST) y prioritarios (PRIO) y el español siguen teniendo ventaja, pero solo cuentan si el
    clip tiene chispa: un clip aburrido de Rubius, Ibai o Auronplay pierde contra uno gracioso de otro streamer.
