@@ -24,6 +24,10 @@ LAUGH = re.compile(r"\b(j+a+j+[ja]*|j+e+j+[je]*|ha(ha)+h?|he(he)+|jaja\w*|jeje\w
 REACT = re.compile(r"\b(no puede ser|no me lo creo|qu[eé] (co[ñn]o|mierda|locura|hostia|fuerte)|wtf|omg|oh my god|"
                    r"holy|no way|what the|bro+|loco|puta|co[ñn]o|joder|hostia|dios m[ií]o|socorro|ayuda|"
                    r"mira|miren|espera|esper[aá]|no no no|para para)\b", re.I)
+# Groserías: indicador (no condición) de humor, sobre todo dichas por un streamer en plena reacción.
+PROF = re.compile(r"\b(mierda\w*|joder\w*|co[ñn]o|puta\w*|put[oa]s?|hostia\w*|cabr[oó]n\w*|carajo|chingad\w*|"
+                  r"verga|culiao\w*|conchetumare|weon\w*|wn|mam[oó]n\w*|gilipollas|choto|pedo|co[jg]er|pendejo\w*|"
+                  r"shit\w*|fuck\w*|damn|ass|asshole|bitch\w*|dick|bastard|hell)\b", re.I)
 TITLE_FUN = re.compile(r"(lmao|lol|jaja|jeje|xd|😂|💀|🤣|omg|wtf|no way|crazy|insane|loco|locura|se cae|fail|"
                        r"muri|muero|borra|hueles|why|cuando|pillaron|pillado|rage|scream|grit)", re.I)
 
@@ -67,11 +71,12 @@ def transcribe(rec, wav):
 
 def chispa(n, m, text):
     """Heurística 0-100: reacciones fuertes en el audio + risas + exclamaciones + título con gancho."""
-    sc = min(m["spike_db"], 24) / 24 * 35          # qué tan fuerte es el pico frente a lo normal
-    sc += min(m["bursts"], 5) / 5 * 15             # varios picos = risas / gritos repetidos
+    sc = min(m["spike_db"], 24) / 24 * 30          # qué tan fuerte es el pico frente a lo normal
+    sc += min(m["bursts"], 5) / 5 * 10             # varios picos = risas / gritos repetidos
     sc += min(len(LAUGH.findall(text)), 4) / 4 * 25
     sc += min(len(REACT.findall(text)), 4) / 4 * 15
-    sc += 10 if TITLE_FUN.search(n.get("title") or "") else 0
+    sc += min(len(PROF.findall(text)), 3) / 3 * 15  # groserías: indicador de reacción cómica (no lo decide todo)
+    sc += 5 if TITLE_FUN.search(n.get("title") or "") else 0
     if len(text.split()) < 6:                      # casi sin habla: depende de la imagen, no se puede juzgar aquí
         sc = min(sc, 55)
     return round(sc)

@@ -5,6 +5,11 @@ ingeniosa, reacción exagerada a algo concreto, fail, susto, situación absurda.
 **qué es lo gracioso y cuándo ocurre**. Si la frase es "no pasa nada especial" o "es un momento tierno/normal",
 el clip no sirve, aunque el audio sea fuerte (gritar o hablar alto no es humor) y aunque sea de un MUST/PRIO.
 
+## Indicadores a favor
+- **Groserías dichas por el streamer** (sobre todo en plena reacción) suelen indicar humor y suman a la `chispa`.
+  Son un indicador, no una condición: no todo clip gracioso las tiene y una grosería suelta sin remate no basta.
+- Risas (propias o del chat/voz), gritos de sorpresa, "no puede ser", silencios seguidos de un remate.
+
 ## Ejemplos que Domingo marcó
 - ✅ Gracioso: Rubius, "Hueles a choto" (remate claro, se entiende solo).
 - ❌ No gracioso: Rubius hablándole a su serpiente, "Dolores, no tienes hambre" (momento cotidiano, sin remate;
