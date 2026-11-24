@@ -13,9 +13,10 @@ Todo se ejecuta desde la raíz del repositorio. Los pasos 1–3 son mecánicos; 
   cada 3 publicados, elige un candidato `ES` aunque sea algo menos viral. Solo se publica uno en inglés si es
   claramente mucho mejor o si no hay ningún candidato en español de calidad aceptable (dilo en el resumen).
 - **Creadores obligatorios (si o si): Rubius, Ibai y Auronplay.** Si `discover.py` muestra un candidato con
-  marca `MUST` (viene de `must_broadcasters` en `config.json`) que cumpla los criterios del paso 1, **se elige ese**
-  antes que cualquier otro, aunque tenga pocas vistas, salvo que ya se haya publicado un clip del mismo streamer
-  en las últimas 8 h. Si no hay ninguno, se sigue con los `PRIO` (creadores en español destacados: TheGrefg,
+  marca `MUST` (viene de `must_broadcasters` en `config.json`) que cumpla los criterios del paso 1 **y tenga
+  chispa (>= 40, es decir, que sea un momento gracioso)**, se elige ese antes que cualquier otro, aunque tenga
+  pocas vistas, salvo que ya se haya publicado un clip del mismo streamer en las últimas 8 h. Un clip aburrido de un
+  MUST no se publica por ser MUST. Si no hay ninguno, se sigue con los `PRIO` (creadores en español destacados: TheGrefg,
   elxokas, Knekro, IlloJuan, DjMaRiiO, ElSpreen, Coscu, Spursito, Mixwell, Vegetta777, etc.) y luego el resto.
   Para agregar más creadores basta editar `priority_broadcasters` o `must_broadcasters` en `config.json`.
 - Publicar **público e inmediato**, sin revisión. 3 clips al día.
@@ -37,14 +38,24 @@ Si faltan `YT_CLIENT_ID`, `YT_CLIENT_SECRET` o `YT_REFRESH_TOKEN`, hacer el clip
 claramente en el resumen cuáles faltan. Si faltan solo `IG_USER_ID`/`IG_ACCESS_TOKEN` (Instagram aún no conectado),
 publicar en YouTube normalmente, omitir Instagram y mencionarlo en una línea del resumen.
 
-## 1. Descubrir
+## 1. Descubrir y elegir lo más GRACIOSO (no lo más "normal")
 ```
-python3 pipeline/discover.py --top 15
+python3 pipeline/preview.py --top 14      # ~2-3 min: baja cada clip en 360p, mide el audio y lo transcribe
 ```
-Elegir **un** candidato: el más viral que cumpla (a) momento autocontenido que se pueda cortar en 15–60 s con
-inicio y desenlace claros, (b) no repetido, (c) no es un anuncio/drop, (d) alterna streamers entre
-corridas (mirar `state/published.json`: evitar el mismo streamer dos veces seguidas). Los clips de
-habla hispana (`ES`) son prioridad, según la regla permanente de arriba.
+Lo que funciona en redes es un **momento**: un remate, una reacción exagerada, un fail, un susto, una sorpresa o algo
+absurdo que haga reír en los primeros segundos. Un streamer hablando tranquilo, explicando o narrando NO es un clip.
+`preview.py` imprime una ficha por clip (audio + transcripción) y un ranking final con la `chispa` (0-100) más el
+bonus por idioma/creador. Elegir **un** clip así:
+1. Leer las transcripciones del ranking de arriba hacia abajo y quedarse con el primero que de verdad tenga gancho
+   (risas, gritos, "no puede ser", un remate claro) y cumpla: (a) momento autocontenido que se corte en 15-60 s,
+   (b) no repetido, (c) no es anuncio/drop, (d) no repite streamer dos corridas seguidas (`state/published.json`).
+2. Exigir `chispa` >= 40. Si ninguno llega, correr `python3 pipeline/preview.py --top 25` para ampliar. Si aun así
+   ninguno llega, publicar el mejor disponible y decir en el resumen que fue un día flojo.
+3. Los creadores obligatorios (MUST) y prioritarios (PRIO) y el español siguen teniendo ventaja, pero solo cuentan si el
+   clip tiene chispa: un clip aburrido de Rubius, Ibai o Auronplay pierde contra uno gracioso de otro streamer.
+4. Antes de descargar, confirmar con el texto y los fotogramas que el chiste se entiende sin contexto; si hay que
+   explicarlo, descartarlo.
+`python3 pipeline/discover.py --top 15` sigue existiendo para ver la lista cruda por vistas.
 
 ## 2. Descargar y transcribir
 ```
@@ -64,7 +75,8 @@ Con la hoja y los fotogramas decidir: recorte del juego (`game_crop`), recorte d
 
 ## 4. Spec y subtítulos
 Escribir `work/<slug>/spec.json` (formato en la cabecera de `pipeline/edit.py`):
-- `segments`: 15–60 s en total. Empieza justo antes del gancho y termina en el desenlace/reacción. Cortes sobre
+- `segments`: 15–60 s en total (ideal 15–35 s). Empieza 1–2 s antes del gancho (nada de intro lenta: lo gracioso debe
+  pasar en los primeros 3 s) y termina justo después del remate/reacción, sin estirar. Cortes sobre
   la transcripción (`words.json`), no a ojo. Se pueden unir dos tramos si hay un salto muerto.
 - `subs`: frases cortas, MAYÚSCULAS, ≤ 2 líneas de 20 caracteres, tiempos **relativos al clip final**;
   `hl: true` (amarillo) para la palabra/frase clave. Traducir al español si el streamer habla en inglés.

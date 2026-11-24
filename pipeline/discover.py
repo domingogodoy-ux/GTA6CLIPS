@@ -33,11 +33,8 @@ def already(node, state, window):
     return False
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--top", type=int, default=15)
-    ap.add_argument("--json", action="store_true", help="imprime solo JSON")
-    a = ap.parse_args()
+def discover(top=15):
+    """Devuelve los candidatos nuevos ordenados por puntaje (lista de nodos de clip)."""
     c = cfg()
     state = load_state()
     skip = re.compile(c["skip_title_regex"], re.I)
@@ -79,7 +76,15 @@ def main():
             node["score"] = round(node["viewCount"] / (age_h + 6) ** 0.5 * boost, 1)
             out.append(node)
     out.sort(key=lambda n: n["score"], reverse=True)
-    out = out[: a.top]
+    return out[:top]
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--top", type=int, default=15)
+    ap.add_argument("--json", action="store_true", help="imprime solo JSON")
+    a = ap.parse_args()
+    out = discover(a.top)
     if a.json:
         print(json.dumps(out, ensure_ascii=False, indent=1))
         return
