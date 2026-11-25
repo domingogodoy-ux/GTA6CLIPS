@@ -16,9 +16,17 @@ def fetch(game, period, langs, n=100):
     q = ('{game(name:"%s"){clips(first:%d,criteria:{period:%s,sort:VIEWS_DESC,languages:[%s]})'
          '{edges{node{title slug viewCount durationSeconds createdAt language '
          'broadcaster{login displayName} video{id} videoOffsetSeconds}}}}}') % (game, n, period, ",".join(langs))
-    d = gql(q)
-    g = (d.get("data") or {}).get("game")
-    return [e["node"] for e in (g["clips"]["edges"] if g else [])]
+    import time
+    for _ in range(5):
+        try:
+            d = gql(q)
+            g = (d.get("data") or {}).get("game")
+            if g and g.get("clips"):
+                return [e["node"] for e in g["clips"]["edges"]]
+        except Exception:
+            pass
+        time.sleep(2)
+    return []
 
 
 def already(node, state, window):
