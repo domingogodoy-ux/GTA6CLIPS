@@ -19,6 +19,8 @@ Todo se ejecuta desde la raíz del repositorio. Los pasos 1–3 son mecánicos; 
      8 h. Un clip aburrido de un MUST no se publica por ser MUST.
   2. `PRIO` (x4): Vegetta777, Carola, Vicens, Nissaxter, juansguarnizo, ElMariana, Perxitaa, Lolito, ElXokas, ElSpreen,
      Coscu, Knekro, Mixwell, Spursito, Willyrex, TazerCraft.
+     **IShowSpeed** también es `PRIO`: es el único creador no hispanohablante con prioridad (los demás en inglés compiten sin
+     ventaja). Sus clips no cuentan como español: caben en los 2 cupos diarios que no son ES.
   3. `EMERG` (x3, mínimo 80 vistas): creadores en español activos en GTA VI con buen alcance (Vicesat, Alewang,
      Superblazing_, Padexxx_, Sinapsis, Ricky Strikis, Folagor, Peereira7, Alexby11, Rivers_gg, jcorko_, Kestico,
      Llobeti4, Paache_, Rene8808, SrTumbao, Wings667, Raptorgamer24, Zelika9, ElCamacho24, GazAdventures).
