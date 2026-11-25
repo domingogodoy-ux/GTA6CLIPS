@@ -82,7 +82,7 @@ def chispa(n, m, text):
     return round(sc)
 
 
-BONUS = {"MUST": 15, "PRIO": 10, "": 0}
+BONUS = {"MUST": 15, "PRIO": 10, "EMERG": 5, "": 0}
 
 
 def final_score(n):

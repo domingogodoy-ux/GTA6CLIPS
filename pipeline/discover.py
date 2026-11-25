@@ -49,16 +49,19 @@ def discover(top=15):
             pref = node.get("language") == c.get("preferred_language")
             must = b.lower() in [x.lower() for x in c.get("must_broadcasters", [])]
             prio = b.lower() in [x.lower() for x in c.get("priority_broadcasters", [])]
+            emer = b.lower() in [x.lower() for x in c.get("emerging_broadcasters", [])]
             minv = c["min_views"]
             if pref:
                 minv = c.get("preferred_language_min_views", minv)
+            if emer:
+                minv = min(minv, c.get("emerging_min_views", minv))
             if prio:
                 minv = min(minv, c.get("priority_min_views", minv))
             if must:
                 minv = min(minv, c.get("must_min_views", minv))
             if node["viewCount"] < minv:
                 continue
-            node["tier"] = "MUST" if must else ("PRIO" if prio else "")
+            node["tier"] = "MUST" if must else ("PRIO" if prio else ("EMERG" if emer else ""))
             if not (c["min_clip_seconds"] <= node["durationSeconds"] <= c["max_clip_seconds"]):
                 continue
             if skip.search(node["title"] or "") or b in c["blocked_broadcasters"]:
@@ -69,6 +72,8 @@ def discover(top=15):
                 continue
             age_h = max(1.0, (now - dt.datetime.fromisoformat(node["createdAt"].replace("Z", "+00:00"))).total_seconds() / 3600)
             boost = c.get("preferred_language_boost", 1.0) if pref else 1.0
+            if emer:
+                boost = max(boost, c.get("emerging_boost", 1.0))
             if prio:
                 boost = max(boost, c.get("priority_boost", 1.0))
             if must:

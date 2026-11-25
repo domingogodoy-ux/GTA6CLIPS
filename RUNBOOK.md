@@ -12,13 +12,18 @@ Todo se ejecuta desde la raíz del repositorio. Los pasos 1–3 son mecánicos; 
   antes de elegir mira `state/published.json`: si en las últimas 24 h hubo menos de 3 clips en español por
   cada 5 publicados, elige un candidato `ES` aunque sea algo menos viral. Solo se publica uno en inglés si es
   claramente mucho mejor o si no hay ningún candidato en español de calidad aceptable (dilo en el resumen).
-- **Creadores obligatorios (si o si): Rubius, Ibai y Auronplay.** Si `discover.py` muestra un candidato con
-  marca `MUST` (viene de `must_broadcasters` en `config.json`) que cumpla los criterios del paso 1 **y tenga
-  chispa (>= 40, es decir, que sea un momento gracioso)**, se elige ese antes que cualquier otro, aunque tenga
-  pocas vistas, salvo que ya se haya publicado un clip del mismo streamer en las últimas 8 h. Un clip aburrido de un
-  MUST no se publica por ser MUST. Si no hay ninguno, se sigue con los `PRIO` (creadores en español destacados: TheGrefg,
-  elxokas, Knekro, IlloJuan, DjMaRiiO, ElSpreen, Coscu, Spursito, Mixwell, Vegetta777, etc.) y luego el resto.
-  Para agregar más creadores basta editar `priority_broadcasters` o `must_broadcasters` en `config.json`.
+- **Tres categorías de creadores en español (`config.json`)**, de mayor a menor prioridad:
+  1. `MUST` (x10): Rubius, AuronPlay, Ibai, IlloJuan, TheGrefg, DjMaRiiO. Si `discover.py` muestra un candidato `MUST`
+     que cumpla los criterios del paso 1 **y tenga chispa (>= 40, o sea un momento gracioso)**, se elige ese antes que
+     cualquier otro, aunque tenga pocas vistas, salvo que ya se haya publicado un clip del mismo streamer en las últimas
+     8 h. Un clip aburrido de un MUST no se publica por ser MUST.
+  2. `PRIO` (x4): Vegetta777, Carola, Vicens, Nissaxter, juansguarnizo, ElMariana, Perxitaa, Lolito, ElXokas, ElSpreen,
+     Coscu, Knekro, Mixwell, Spursito, Willyrex, TazerCraft.
+  3. `EMERG` (x3, mínimo 80 vistas): creadores en español activos en GTA VI con buen alcance (Vicesat, Alewang,
+     Superblazing_, Padexxx_, Sinapsis, Ricky Strikis, Folagor, Peereira7, Alexby11, Rivers_gg, jcorko_, Kestico,
+     Llobeti4, Paache_, Rene8808, SrTumbao, Wings667, Raptorgamer24, Zelika9, ElCamacho24, GazAdventures).
+  Después van los demás clips en español y luego el resto. Para mover o agregar creadores basta editar
+  `must_broadcasters`, `priority_broadcasters` o `emerging_broadcasters` en `config.json`.
 - Publicar **público e inmediato**, sin revisión. 5 clips al día (uno por corrida).
 - Contenido sensible (desnudez, sexo, drogas, violencia gráfica): **no se descarta, se difumina** solo la zona
   problemática (`blur` en el spec) y se publica igual. Excepción: si la escena es explícita de principio a fin y
