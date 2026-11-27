@@ -36,6 +36,8 @@ def main():
     C = 30 * sr
     words = []
     for i in range(0, len(x), C):
+        if len(x) - i < sr:  # resto < 1 s: el modelo falla con trozos diminutos
+            break
         s = rec.create_stream()
         s.accept_waveform(sr, x[i:i + C])
         rec.decode_stream(s)
