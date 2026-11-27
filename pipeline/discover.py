@@ -58,6 +58,15 @@ def discover(top=15):
             must = b.lower() in [x.lower() for x in c.get("must_broadcasters", [])]
             prio = b.lower() in [x.lower() for x in c.get("priority_broadcasters", [])]
             emer = b.lower() in [x.lower() for x in c.get("emerging_broadcasters", [])]
+            listed = must or prio or emer or b.lower() in [x.lower() for x in c.get("language_exceptions", [])]
+            # Solo español: un clip que no está en ES se descarta salvo que sea de un creador de nuestras listas
+            # (o de las excepciones, p. ej. IShowSpeed, el único no hispanohablante permitido).
+            if c.get("strict_language") and not pref and not listed:
+                continue
+            if c.get("strict_language") and not pref and b.lower() not in [x.lower() for x in c.get("language_exceptions", [])] \
+                    and node.get("language") not in (None, "", "ES", "es"):
+                # creador de las listas pero clip marcado en otro idioma (p. ej. EN): fuera, salvo excepciones
+                continue
             minv = c["min_views"]
             if pref:
                 minv = c.get("preferred_language_min_views", minv)

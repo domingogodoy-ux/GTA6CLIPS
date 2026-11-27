@@ -7,11 +7,12 @@ Todo se ejecuta desde la raíz del repositorio. Los pasos 1–3 son mecánicos; 
 ## Reglas permanentes del dueño (Domingo)
 - Idioma de textos: español de Chile, tono casual. Nunca bajar la resolución del original (el render usa
   fuente 1080p/1440p y salida 1080x1920@60 con CRF 17). No abusar de zooms.
-- **Prioridad a creadores en español**: la mayoría de los clips del día (al menos 3 de cada 5) deben ser de
-  streamers que hablan español. `discover.py` ya les da más puntaje (x2.5) y acepta menos vistas (150); aun así,
-  antes de elegir mira `state/published.json`: si en las últimas 24 h hubo menos de 3 clips en español por
-  cada 5 publicados, elige un candidato `ES` aunque sea algo menos viral. Solo se publica uno en inglés si es
-  claramente mucho mejor o si no hay ningún candidato en español de calidad aceptable (dilo en el resumen).
+- **SOLO contenido en español** (regla dura, vigente desde el 26-nov): `discover.py` descarta todo clip que no esté en
+  español, salvo los de **IShowSpeed**, el único creador no hispanohablante permitido (`language_exceptions` en
+  `config.json`). Nunca elijas ni "amplíes la búsqueda" a clips de otros streamers en inglés (tminnzy, ohnepixel,
+  Kai Cenat, LilyPichu, etc.). Máximo **1 clip de IShowSpeed por día** y solo si tiene chispa >= 40. Si no hay ningún
+  candidato en español con chispa >= 40, usa `--top 25`; si aun así no hay, prefiere publicar el mejor clip en español
+  disponible (aunque sea más flojo) antes que uno en inglés, y dilo en el resumen.
 - **Tres categorías de creadores en español (`config.json`)**, de mayor a menor prioridad:
   1. `MUST` (x10): Rubius, AuronPlay, Ibai, IlloJuan, TheGrefg, DjMaRiiO. Si `discover.py` muestra un candidato `MUST`
      que cumpla los criterios del paso 1 **y tenga chispa (>= 40, o sea un momento gracioso)**, se elige ese antes que
@@ -20,7 +21,7 @@ Todo se ejecuta desde la raíz del repositorio. Los pasos 1–3 son mecánicos; 
   2. `PRIO` (x4): Vegetta777, Carola, Vicens, Nissaxter, juansguarnizo, ElMariana, Perxitaa, Lolito, ElXokas, ElSpreen,
      Coscu, Knekro, Mixwell, Spursito, Willyrex, TazerCraft.
      **IShowSpeed** también es `PRIO`: es el único creador no hispanohablante con prioridad (los demás en inglés compiten sin
-     ventaja). Sus clips no cuentan como español: caben en los 2 cupos diarios que no son ES.
+     ventaja). Máx. 1 clip suyo por día.
   3. `EMERG` (x3, mínimo 80 vistas): creadores en español activos en GTA VI con buen alcance (Vicesat, Alewang,
      Superblazing_, Padexxx_, Sinapsis, Ricky Strikis, Folagor, Peereira7, Alexby11, Rivers_gg, jcorko_, Kestico,
      Llobeti4, Paache_, Rene8808, SrTumbao, Wings667, Raptorgamer24, Zelika9, ElCamacho24, GazAdventures).

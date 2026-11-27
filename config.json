@@ -76,5 +76,9 @@
     "gazadventures"
   ],
   "emerging_boost": 3.0,
-  "emerging_min_views": 80
+  "emerging_min_views": 80,
+  "strict_language": true,
+  "language_exceptions": [
+    "ishowspeed"
+  ]
 }
